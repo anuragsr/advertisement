@@ -1,4 +1,4 @@
-html, body, #three-ctn{
+html, body, #ctn-three{
   height: 100%;
 	width: 100%;
 }
@@ -8,4 +8,9 @@ body {
   background: rgb(36, 41, 46);
   color: #fff;
   text-align: center;
+}
+
+.css3d{ 
+  position: absolute;
+  top: 0; left: 0;
 }

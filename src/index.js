@@ -7,7 +7,7 @@ import { l, cl } from './utils/helpers'
 
 $(() => {
   setTimeout(() => {
-    const scene = new THREEStarter({ ctn: $("#three-ctn") })
+    const scene = new THREEStarter({ ctn: $("#ctn-three") })
     scene.init()
   }, 50)
 })
