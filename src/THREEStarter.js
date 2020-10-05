@@ -17,6 +17,8 @@ export default class THREEStarter {
     this.ctn = opts.ctn
     this.w = this.ctn.width()
     this.h = this.ctn.height()
+    
+    this.clock = new THREE.Clock()
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     this.rendererCSS = new CSS3DRenderer()
 
@@ -145,7 +147,7 @@ export default class THREEStarter {
     const { 
       renderer, scene, 
       rendererCSS, sceneCSS, 
-      camera, stats
+      camera, stats, mixer, clock
     } = this
     try{
       stats.begin()
@@ -153,6 +155,8 @@ export default class THREEStarter {
       // monitored code goes here      
       renderer.render(scene, camera)
       rendererCSS.render(sceneCSS, camera)
+      
+      if (mixer) mixer.update(clock.getDelta())
       
       stats.end()
     } catch (err){
@@ -341,16 +345,20 @@ export default class THREEStarter {
 
       // Auto animated billboard
       gltf.load('assets/models/billboards/b3/scene.gltf', obj => { 
-        // l(obj)
-        const billboard3 = obj.scene 
-        billboard3.name = "Billboard 3"
-        // billboard3.position.z = 250
-        billboard3.scale.multiplyScalar(.15)
-        // router.rotation.set(0, Math.PI / 2 + .2, 0)
-        billboard3.position.set(200, 200, 0)
-        billboard3.rotation.set(0, -Math.PI / 2, 0)
-        this.introduce(billboard3)
+        const bb = obj.scene 
+        this.mixer = new THREE.AnimationMixer(bb)                
 
+        // Play a specific animation
+        const clips = obj.animations
+        const clip = THREE.AnimationClip.findByName(clips, 'Take 001' )
+        const action = this.mixer.clipAction(clip)
+        action.play()
+
+        bb.name = "Billboard Animated"
+        bb.scale.multiplyScalar(.15)
+        bb.position.set(200, 200, 0)
+        bb.rotation.set(0, -Math.PI / 2, 0)
+        this.introduce(bb)
       })
 
       mtl.load("assets/models/billboards/b4/untitled.mtl", materials => {
