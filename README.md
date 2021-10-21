@@ -1,6 +1,3 @@
-## threejs-webpack-starter
-This is a boilerplate for a basic threejs scene, using a default webpack config
+## advertisement
 
-Based on [this starter](https://github.com/lifenautjoe/webpack-starter-basic)
-___
-Author [Anurag Srivastava](http://www.envisagecyberart.in)
+A three.js scene containing billboards with advertisements. The billboards are used in [this](https://github.com/anuragsr/villes-de-publicite) project
