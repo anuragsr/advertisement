@@ -5,12 +5,26 @@ html, body, #ctn-three{
 
 body {
   font-family: 'Courier New', Courier, monospace;
-  background: rgb(36, 41, 46);
+  //background: rgb(36, 41, 46);
   color: #fff;
   text-align: center;
 }
 
-.css3d{ 
+#ctn-bg{
+    height: 98vh;
+    width: 98vw;
+    position: absolute;
+    top: 1vh; left: 1vw;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+}
+
+#ctn-three{
+    position: relative;
+    z-index: 2;
+}
+
+.css3d{
   position: absolute;
   top: 0; left: 0;
 }

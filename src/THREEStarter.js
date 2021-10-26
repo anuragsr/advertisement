@@ -17,7 +17,7 @@ export default class THREEStarter {
     this.ctn = opts.ctn
     this.w = this.ctn.width()
     this.h = this.ctn.height()
-    
+
     this.clock = new THREE.Clock()
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     this.rendererCSS = new CSS3DRenderer()
@@ -28,7 +28,7 @@ export default class THREEStarter {
     this.camera = new THREE.PerspectiveCamera(45, this.w / this.h, 1, 5000)
 
     this.origin = new THREE.Vector3(0, 0, 0)
-    this.cameraStartPos = new THREE.Vector3(0, 250, 500)
+    this.cameraStartPos = new THREE.Vector3(0, 50, 500)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls2 = new OrbitControls(this.camera, this.rendererCSS.domElement)
 
@@ -65,18 +65,18 @@ export default class THREEStarter {
     // Initialize the scene
     this.initScene()
     // Uncomment below 2 lines for testing
-    show = true
-    this.initGUI()
+    // show = true
+    // this.initGUI()
     this.toggleHelpers(show)
     this.addListeners()
     this.resize()
     this.addObjects()
   }
   initScene(){
-    const { 
+    const {
       ctn, w, h,
       camera, scene, renderer, rendererCSS,
-      cameraStartPos, origin, 
+      cameraStartPos, origin,
       spotLightMesh1, spotLight1, lightPos1,
       spotLightMesh2, spotLight2, lightPos2
     } = this
@@ -100,14 +100,14 @@ export default class THREEStarter {
     // Cameras and ambient light
     camera.position.copy(cameraStartPos)
     camera.lookAt(origin)
-    scene.add(camera)    
+    scene.add(camera)
     scene.add(new THREE.AmbientLight(0xffffff, .2))
 
     // Spotlight and representational mesh
-    spotLightMesh1.position.copy(lightPos1)  
+    spotLightMesh1.position.copy(lightPos1)
     spotLight1.position.copy(lightPos1)
-    scene.add(spotLight1)    
-    
+    scene.add(spotLight1)
+
     spotLightMesh2.position.copy(lightPos2)
     spotLight2.position.copy(lightPos2)
     scene.add(spotLight2)
@@ -144,20 +144,20 @@ export default class THREEStarter {
     }
   }
   render() {
-    const { 
-      renderer, scene, 
-      rendererCSS, sceneCSS, 
+    const {
+      renderer, scene,
+      rendererCSS, sceneCSS,
       camera, stats, mixer, clock
     } = this
     try{
       stats.begin()
-      
-      // monitored code goes here      
+
+      // monitored code goes here
       renderer.render(scene, camera)
       rendererCSS.render(sceneCSS, camera)
-      
+
       if (mixer) mixer.update(clock.getDelta())
-      
+
       stats.end()
     } catch (err){
       l(err)
@@ -168,12 +168,12 @@ export default class THREEStarter {
     let {
       w, h, ctn, camera, renderer, rendererCSS
     } = this
-    
+
     w = ctn.width()
     h = ctn.height()
     camera.aspect = w / h
     camera.updateProjectionMatrix()
-  
+
     renderer.setSize(w, h)
     rendererCSS.setSize(w, h)
   }
@@ -191,7 +191,7 @@ export default class THREEStarter {
 
     return new THREE.Mesh(geometry, material)
   }
-  introduce(obj){ this.scene.add(obj) }  
+  introduce(obj){ this.scene.add(obj) }
   introduceCSS3D(obj){ this.sceneCSS.add(obj) }
   addObjects(){
     const { scene, createMesh } = this
@@ -209,13 +209,13 @@ export default class THREEStarter {
       // Mesh to blend with ad gif
       const adMesh = createMesh(
         new THREE.PlaneGeometry(),
-        // Essentially this material creates a 'hole' in our webgl scene to peek 
+        // Essentially this material creates a 'hole' in our webgl scene to peek
         // into the CSS scene behind it
-        new THREE.MeshBasicMaterial({ 
+        new THREE.MeshBasicMaterial({
           // wireframe: true,
-          // color: 0xff0000, 
+          // color: 0xff0000,
           transparent: true, opacity: 0,
-          color: 0x000000, blending: THREE.NoBlending 
+          color: 0x000000, blending: THREE.NoBlending
         })
       )
       adMesh.name = "Plane"
@@ -229,12 +229,12 @@ export default class THREEStarter {
 
       // transforms for the group
       const { pos, rot } = billboard
-      billGr.position.set(pos[0], pos[1], pos[2])
+      billGr.position.set(pos[0], pos[1] - 150, pos[2])
       billGr.rotation.set(rot[0], rot[1], rot[2])
       billGr.scale.multiplyScalar(scaleFactor)
       billGr.updateMatrixWorld()
 
-      // Get world coordinates of the ad mesh 
+      // Get world coordinates of the ad mesh
       const targetPos = new THREE.Vector3()
       adMesh.getWorldPosition(targetPos)
 
@@ -242,7 +242,7 @@ export default class THREEStarter {
       const { id, scale, offset } = css
       const cssObject = new CSS3DObject(document.getElementById(id))
       this.introduceCSS3D(cssObject)
-      
+
       // Copy world coordinates of the ad mesh to the ad gif
       cssObject.position.copy(targetPos)
       if(offset){
@@ -264,11 +264,11 @@ export default class THREEStarter {
         new OBJLoader().setMaterials(materials)
         .load("assets/models/billboards/b1/untitled.obj", object => {
           // Billboard model - normalize size, scale down later
-          const bb = object 
+          const bb = object
           bb.name = "Billboard"
           bb.scale.multiplyScalar(20)
-          bb.rotation.y = Math.PI 
-          
+          bb.rotation.y = Math.PI
+
           const gr = createBillBoard({
             name: "Billboard Group 1 (Adidas)",
             billboard: { mesh: bb, pos: [0, 0, 0], rot: [0, 0, 0] },
@@ -306,9 +306,9 @@ export default class THREEStarter {
           l(gr4)
         })
       })
-      
+
       // Double Sided billboard
-      gltf.load('assets/models/billboards/b2/scene.glb', obj => { 
+      gltf.load('assets/models/billboards/b2/scene.glb', obj => {
         // Billboard model - normalize size, scale down later
         const bb = obj.scene
         bb.name = "Billboard"
@@ -344,9 +344,9 @@ export default class THREEStarter {
       })
 
       // Auto animated billboard
-      gltf.load('assets/models/billboards/b3/scene.gltf', obj => { 
-        const bb = obj.scene 
-        this.mixer = new THREE.AnimationMixer(bb)                
+      gltf.load('assets/models/billboards/b3/scene.gltf', obj => {
+        const bb = obj.scene
+        this.mixer = new THREE.AnimationMixer(bb)
 
         // Play a specific animation
         const clips = obj.animations
@@ -366,11 +366,11 @@ export default class THREEStarter {
         new OBJLoader().setMaterials(materials)
         .load("assets/models/billboards/b4/untitled.obj", object => {
           // Billboard model - normalize size, scale down later
-          const bb = object 
+          const bb = object
           bb.name = "Billboard"
           bb.scale.multiplyScalar(20)
-          bb.rotation.y = Math.PI 
-          
+          bb.rotation.y = Math.PI
+
           const gr = createBillBoard({
             name: "Billboard Group 8 (Adidas)",
             billboard: { mesh: bb, pos: [-200, 100, 0], rot: [0, 0, 0] },
@@ -390,9 +390,9 @@ export default class THREEStarter {
           l(gr2)
         })
       })
-      
+
     }
-    
+
     mgr.onError = url => {
       l('There was an error loading ' + url)
     }
